@@ -1,0 +1,34 @@
+﻿<h1>
+	This is Index page of Registration
+</h1>
+@model List<Student>
+<h3>
+	Student List
+</h3>
+<a href="/Registration/Create">Create New</a>
+<table class="table">
+	<tr>
+		<th>Id</th>
+		<th>First Name</th>
+		<th>Last Name</th>
+		<th>Department</th>
+		<th>About</th>
+	</tr>
+	@{
+		foreach(var student in Model)
+		{
+			<tr>
+			<td>@(student.Id)</td>
+			<td>@(student.FirstName)</td>
+			<td>@(student.LastName)</td>
+			<td>@(student.Department)</td>
+			<td>
+					<a href="/Registration/About?id=@(student.Id)">About Me</a>&nbsp;
+					<a href="/Registration/Edit?id=@(student.Id)">Edit</a>&nbsp;
+					<a href="/Registration/Delete?id=@(student.Id)">Delete</a>&nbsp;
+			</td>
+			
+			</tr>
+		}
+	}
+</table>

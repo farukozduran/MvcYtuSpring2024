@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - W3</title>
+    
+    @Html.Partial("/Views/Components/_ScriptsAndCss.cshtml")
+
+</head>
+<body>
+    @Html.Partial("/Views/Components/_Header.cshtml")
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @Html.Partial("/Views/Components/_Footer.cshtml")
+
+
+
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
