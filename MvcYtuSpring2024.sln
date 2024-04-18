@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "W01", "W01\W01.csproj", "{B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "W2", "W2\W2.csproj", "{F68F7855-3DFC-4FA9-8EF8-14537378FB77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3", "W3\W3.csproj", "{5BC6CF36-75BD-4B66-9028-92B4563A1C19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "W3", "W3\W3.csproj", "{5BC6CF36-75BD-4B66-9028-92B4563A1C19}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ObsWebUI", "ObsWebUI\ObsWebUI.csproj", "{C16166B7-D979-4A75-8224-AD428E8E0BBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{E8C998CA-864B-4519-BEAC-0C3EB08A6E21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{90C33461-94DC-4BBB-8F64-C1A4FF5F08D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +33,18 @@ Global
 		{5BC6CF36-75BD-4B66-9028-92B4563A1C19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BC6CF36-75BD-4B66-9028-92B4563A1C19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BC6CF36-75BD-4B66-9028-92B4563A1C19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C16166B7-D979-4A75-8224-AD428E8E0BBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C16166B7-D979-4A75-8224-AD428E8E0BBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C16166B7-D979-4A75-8224-AD428E8E0BBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C16166B7-D979-4A75-8224-AD428E8E0BBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8C998CA-864B-4519-BEAC-0C3EB08A6E21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8C998CA-864B-4519-BEAC-0C3EB08A6E21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8C998CA-864B-4519-BEAC-0C3EB08A6E21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8C998CA-864B-4519-BEAC-0C3EB08A6E21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90C33461-94DC-4BBB-8F64-C1A4FF5F08D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90C33461-94DC-4BBB-8F64-C1A4FF5F08D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90C33461-94DC-4BBB-8F64-C1A4FF5F08D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90C33461-94DC-4BBB-8F64-C1A4FF5F08D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
