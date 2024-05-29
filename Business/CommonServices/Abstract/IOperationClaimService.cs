@@ -1,4 +1,5 @@
 ﻿using Business.Services.Obs.Abstract.CommonInterfaces;
+using Entities.CommonEntities;
 using Entities.ObsEntities;
 using System;
 using System.Collections.Generic;
@@ -6,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.Services.Obs.Abstract
+namespace Business.CommonServices.Abstract
 {
-	public interface IFacultyService:ICommonDbOperations<Faculty>
+    public interface IOperationClaimService:ICommonDbOperations<OperationClaim>
     {
         
     }

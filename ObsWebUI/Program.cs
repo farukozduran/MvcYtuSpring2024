@@ -1,10 +1,15 @@
+using Business.AuthorizationServices;
+using Business.CommonServices.Abstract;
+using Business.CommonServices.Concrete;
 using Business.Services.Obs.Abstract;
 using Business.Services.Obs.Concrete;
 using Caching.Abstract;
 using Caching.Concrete;
 using DataAccess.Dal.Abstract;
 using DataAccess.Dal.Concrete;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using ObsWebUI.MyMiddlewares;
+using System.Configuration;
 using System.Diagnostics;
 
 namespace ObsWebUI
@@ -23,9 +28,33 @@ namespace ObsWebUI
             builder.Services.AddSingleton<IDepartmentDal, DepartmentDal>();
             builder.Services.AddSingleton<IFacultyService, FacultyService>();
             builder.Services.AddSingleton<IDepartmentService, DepartmentService>();
-            builder.Services.AddMemoryCache();
+
+			builder.Services.AddSingleton<IUserDal, UserDal>();
+			builder.Services.AddSingleton<IOperationClaimDal, OperationClaimDal>();
+			builder.Services.AddSingleton<IUserOperationClaimDal, UserOperationClaimDal>();
+			builder.Services.AddSingleton<IUserService, UserService>();
+            builder.Services.AddSingleton<IOperationClaimService, OperationClaimService>();
+            builder.Services.AddSingleton<IUserOperationClaimService, UserOperationClaimService>();
+			builder.Services.AddMemoryCache();
             //builder.Services.AddSingleton<ICacheProvider, MemoryCacheProvider>();
             builder.Services.AddSingleton<ICacheProvider, RedisCacheProvider>();
+
+            var cookieOptions = builder.Configuration.GetSection("CookieOptions").Get<CookieAuthOptions>();
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+            {
+                options.Cookie.Name = cookieOptions.Name;
+				options.LoginPath = cookieOptions.LoginPath;
+				options.LogoutPath = cookieOptions.LogoutPath;
+				options.AccessDeniedPath = cookieOptions.AccessDeniedPath;
+				options.SlidingExpiration = cookieOptions.SlidingExpiration;
+				options.ExpireTimeSpan = TimeSpan.FromSeconds(cookieOptions.TimeOut);
+
+
+
+
+			}
+);
+
 
             var app = builder.Build();
 
@@ -38,13 +67,14 @@ namespace ObsWebUI
             }
 
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
+
+            app.UseCookiePolicy();
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
-            app.UseAuthentication();
+            
 
             //app.Run(async (context) => Mid1.MyMiddleware1(context));
 
@@ -79,6 +109,9 @@ namespace ObsWebUI
 
 			app.UseMiddleware<ErrorLoggerMiddleware>();
 
+			app.UseAuthentication();
+
+			app.UseAuthorization();			
 
 			app.MapControllerRoute(
                 name: "default",
