@@ -1,7 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using ObsWebUI.Models;
-using ObsWebUI.Models.EfDbContext;
-using System.Diagnostics;
 
 namespace ObsWebUI.Controllers
 {
@@ -11,6 +8,7 @@ namespace ObsWebUI.Controllers
 
         public IActionResult Index()
         {
+            //throw new Exception("This is a text exception!");
             return View();
         }    
     }
