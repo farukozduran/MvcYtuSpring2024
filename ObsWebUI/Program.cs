@@ -1,4 +1,6 @@
 using Business.AuthorizationServices;
+using Business.AuthorizationServices.Abstract;
+using Business.AuthorizationServices.Concrete;
 using Business.CommonServices.Abstract;
 using Business.CommonServices.Concrete;
 using Business.Services.Obs.Abstract;
@@ -23,6 +25,8 @@ namespace ObsWebUI
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddHttpContextAccessor();
+
             // Dependency Injection
             builder.Services.AddSingleton<IFacultyDal, FacultyDal>();
             builder.Services.AddSingleton<IDepartmentDal, DepartmentDal>();
@@ -35,6 +39,8 @@ namespace ObsWebUI
 			builder.Services.AddSingleton<IUserService, UserService>();
             builder.Services.AddSingleton<IOperationClaimService, OperationClaimService>();
             builder.Services.AddSingleton<IUserOperationClaimService, UserOperationClaimService>();
+			builder.Services.AddSingleton<IAuthService, AuthService>();
+
 			builder.Services.AddMemoryCache();
             //builder.Services.AddSingleton<ICacheProvider, MemoryCacheProvider>();
             builder.Services.AddSingleton<ICacheProvider, RedisCacheProvider>();
@@ -108,6 +114,8 @@ namespace ObsWebUI
             app.UseMiddleware<AccessLoggerMiddleware>();
 
 			app.UseMiddleware<ErrorLoggerMiddleware>();
+
+
 
 			app.UseAuthentication();
 

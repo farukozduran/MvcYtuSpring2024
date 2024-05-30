@@ -43,7 +43,6 @@ namespace ObsWebUI.Controllers
 
         // GET: Faculties/Create
 
-        [Authorize] // action level authorization
         public IActionResult Create()
         {
             return View();
@@ -52,7 +51,6 @@ namespace ObsWebUI.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public IActionResult Create(Faculty faculty)
         {
             if (ModelState.IsValid)
@@ -63,7 +61,6 @@ namespace ObsWebUI.Controllers
             return View(faculty);
         }
 
-        [Authorize]
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -84,7 +81,7 @@ namespace ObsWebUI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
+
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DeanName")] Faculty faculty)
         {
             if (id != faculty.Id)

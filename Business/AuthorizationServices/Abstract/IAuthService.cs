@@ -9,8 +9,8 @@ namespace Business.AuthorizationServices.Abstract
 {
 	public interface IAuthService
 	{
-		Task<bool> SignIn(string email, string password);
+		Task<bool> SignInAsync(string email, string password);
 
-		Task SignOut();
+		Task SignOutAsync();
 	}
 }

@@ -1,10 +1,12 @@
 ﻿using Business.Services.Obs.Abstract;
 using Entities.ObsEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ObsWebUI.Controllers
 {
+    [Authorize(Roles = "admin,user")]
     public class DepartmentsController : Controller
     {
         private readonly IDepartmentService _departmentService;
@@ -39,7 +41,7 @@ namespace ObsWebUI.Controllers
             return View(department);
         }
 
-        // GET: Departments/Create
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             ViewBag.faculties = _facultyService.GetList().OrderBy(p => p.Name).ToList();
@@ -52,6 +54,7 @@ namespace ObsWebUI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public IActionResult Create([Bind("Id,FacultyId,Name")] Department department)
         {
             if (ModelState.IsValid)
@@ -66,6 +69,7 @@ namespace ObsWebUI.Controllers
         }
 
         // GET: Departments/Edit/5
+        [Authorize(Roles = "admin")]
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -88,6 +92,7 @@ namespace ObsWebUI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public IActionResult Edit(int id, [Bind("Id,FacultyId,Name")] Department department)
         {
             if (id != department.Id)
@@ -119,6 +124,7 @@ namespace ObsWebUI.Controllers
         }
 
         // GET: Departments/Delete/5
+        [Authorize(Roles = "admin")]
         public IActionResult Delete(int? id)
         {
             if (id == null)
@@ -138,6 +144,7 @@ namespace ObsWebUI.Controllers
         // POST: Departments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public IActionResult DeleteConfirmed(int id)
         {
             var department = _departmentService.Get(p => p.Id == id);

@@ -17,7 +17,7 @@ namespace Business.AuthorizationServices.Concrete
 	{
 
 
-		public async Task<bool> SignIn(string email, string password)
+		public async Task<bool> SignInAsync(string email, string password)
 		{
 			var user = userService.GetUserByEmailAndPassword(email, password);
 
@@ -52,7 +52,7 @@ namespace Business.AuthorizationServices.Concrete
 			}
 		}
 
-		public async Task SignOut()
+		public async Task SignOutAsync()
 		{
 			await httpContextAccessor.HttpContext.SignOutAsync();
 		}
