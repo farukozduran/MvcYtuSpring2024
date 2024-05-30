@@ -1,3 +1,5 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Business.AuthorizationServices;
 using Business.AuthorizationServices.Abstract;
 using Business.AuthorizationServices.Concrete;
@@ -5,11 +7,13 @@ using Business.CommonServices.Abstract;
 using Business.CommonServices.Concrete;
 using Business.Services.Obs.Abstract;
 using Business.Services.Obs.Concrete;
+using Business.Services.Obs.DependencyResolver;
 using Caching.Abstract;
 using Caching.Concrete;
 using DataAccess.Dal.Abstract;
 using DataAccess.Dal.Concrete;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Hosting;
 using ObsWebUI.MyMiddlewares;
 using System.Configuration;
 using System.Diagnostics;
@@ -22,28 +26,39 @@ namespace ObsWebUI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddHttpContextAccessor();
 
+            builder.Services.AddMemoryCache();
+
+            builder.Services.AddHttpClient();
+
+            builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+            builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+            {
+                containerBuilder.RegisterModule(new ObsDependencyModule());
+            });
+
+
             // Dependency Injection
-            builder.Services.AddSingleton<IFacultyDal, FacultyDal>();
-            builder.Services.AddSingleton<IDepartmentDal, DepartmentDal>();
-            builder.Services.AddSingleton<IFacultyService, FacultyService>();
-            builder.Services.AddSingleton<IDepartmentService, DepartmentService>();
+            //         builder.Services.AddSingleton<IFacultyDal, FacultyDal>();
+            //         builder.Services.AddSingleton<IDepartmentDal, DepartmentDal>();
+            //         builder.Services.AddSingleton<IFacultyService, FacultyService>();
+            //         builder.Services.AddSingleton<IDepartmentService, DepartmentService>();
 
-			builder.Services.AddSingleton<IUserDal, UserDal>();
-			builder.Services.AddSingleton<IOperationClaimDal, OperationClaimDal>();
-			builder.Services.AddSingleton<IUserOperationClaimDal, UserOperationClaimDal>();
-			builder.Services.AddSingleton<IUserService, UserService>();
-            builder.Services.AddSingleton<IOperationClaimService, OperationClaimService>();
-            builder.Services.AddSingleton<IUserOperationClaimService, UserOperationClaimService>();
-			builder.Services.AddSingleton<IAuthService, AuthService>();
-
-			builder.Services.AddMemoryCache();
-            //builder.Services.AddSingleton<ICacheProvider, MemoryCacheProvider>();
-            builder.Services.AddSingleton<ICacheProvider, RedisCacheProvider>();
+            //builder.Services.AddSingleton<IUserDal, UserDal>();
+            //builder.Services.AddSingleton<IOperationClaimDal, OperationClaimDal>();
+            //builder.Services.AddSingleton<IUserOperationClaimDal, UserOperationClaimDal>();
+            //builder.Services.AddSingleton<IUserService, UserService>();
+            //         builder.Services.AddSingleton<IOperationClaimService, OperationClaimService>();
+            //         builder.Services.AddSingleton<IUserOperationClaimService, UserOperationClaimService>();
+            //builder.Services.AddSingleton<IAuthService, AuthService>();			
+            //         builder.Services.AddSingleton<ICacheProvider, MemoryCacheProvider>();
+            //         //builder.Services.AddSingleton<ICacheProvider, RedisCacheProvider>();
 
             var cookieOptions = builder.Configuration.GetSection("CookieOptions").Get<CookieAuthOptions>();
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>

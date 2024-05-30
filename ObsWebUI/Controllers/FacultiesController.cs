@@ -1,44 +1,50 @@
 ﻿using Entities.ObsEntities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Business.Services.Obs.Abstract;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ObsWebUI.Controllers
 {
-    [Authorize(Roles = "admin")]  // controller level authorization
-    public class FacultiesController : Controller
+    [Authorize]  // controller level authorization
+    public class FacultiesController(HttpClient client) : Controller
     {
-
-        private IFacultyService _facultyService;
-
-        public FacultiesController(IFacultyService facultyService)
-        {
-            _facultyService = facultyService;
-        }
+        private HttpClient _client = client;
+        private const string baseUrl = "https://localhost:44366/ObsApi";
+        
 
         // GET: Faculties
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View( _facultyService.GetList());
+            var controller = "faculties";
+            var action = "getList";
+            var fullAddress = $"{baseUrl}/{controller}/{action}";
+
+            var response = await _client.GetFromJsonAsync<IEnumerable<Faculty>>(fullAddress);
+
+            return View(response);
         }
 
         // GET: Faculties/Details/5
-        public  IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if(id == null)
             {
                 return NotFound();
             }
+            var controller = "faculties";
+            var action = "get";
+            var fullAddress = $"{baseUrl}/{controller}/{action}?id={id}";
 
-            var faculty = _facultyService.Get(p => p.Id == id);
-                
-            if (faculty == null)
+            var response = await _client.GetFromJsonAsync<IEnumerable<Faculty>>(fullAddress);
+
+            var faculty = response;
+
+            if(faculty == null)
             {
                 return NotFound();
             }
-
             return View(faculty);
+
         }
 
         // GET: Faculties/Create
@@ -51,28 +57,31 @@ namespace ObsWebUI.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Faculty faculty)
+        public async Task<IActionResult> Create([Bind("Id,Name,DeanName")] Faculty faculty)
         {
             if (ModelState.IsValid)
             {
-                _facultyService.Add(faculty);
+                var controller = "faculties";
+                var action = "create";
+                var fullAddress = $"{baseUrl}/{controller}/{action}";
+
+                var response = await _client.PostAsJsonAsync(fullAddress, faculty);
+
                 return RedirectToAction(nameof(Index));
             }
             return View(faculty);
         }
-
-        public IActionResult Edit(int? id)
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var controller = "faculties";
+            var action = "get";
+            var fullAddress = $"{baseUrl}/{controller}/{action}?id={id}";
 
-            var faculty =  _facultyService.Get(p => p.Id == id);
-            if (faculty == null)
-            {
-                return NotFound();
-            }
+            var response = await _client.GetFromJsonAsync<Faculty>(fullAddress);
+
+            var faculty = response;
+
             return View(faculty);
         }
 
@@ -93,18 +102,15 @@ namespace ObsWebUI.Controllers
             {
                 try
                 {
-                    _facultyService.Update(faculty);
+                    var controller = "faculties";
+                    var action = "Edit";
+                    var fullAddress = $"{baseUrl}/{controller}/{action}";
+
+                    var response = await _client.PostAsJsonAsync(fullAddress, faculty);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!FacultyExists(faculty.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -112,18 +118,20 @@ namespace ObsWebUI.Controllers
         }
 
         // GET: Faculties/Delete/5
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var faculty =  _facultyService.Get(m => m.Id == id);
-            if (faculty == null)
-            {
-                return NotFound();
-            }
+            var controller = "faculties";
+            var action = "get";
+            var fullAddress = $"{baseUrl}/{controller}/{action}?id={id}";
+
+            var response = await _client.GetFromJsonAsync<Faculty>(fullAddress);
+
+            var faculty = response;
 
             return View(faculty);
         }
@@ -131,19 +139,25 @@ namespace ObsWebUI.Controllers
         // POST: Faculties/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var faculty = _facultyService.Get(p => p.Id == id);
-            if (faculty != null)
-            {
-                _facultyService.Remove(faculty);
-            }
+            var controller1 = "faculties";
+            var action1 = "get";
+            var fullAddress1 = $"{baseUrl}/{controller1}/{action1}?id={id}";
+
+            var response1 = await _client.GetFromJsonAsync<Faculty>(fullAddress1);
+
+            var faculty1 = response1;
+
+            var controller = "faculties";
+            var action = "delete";
+            var fullAddress = $"{baseUrl}/{controller}/{action}";
+
+            var response = await _client.PostAsJsonAsync(fullAddress, faculty1);
+
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FacultyExists(int id)
-        {
-            return _facultyService.Any(e => e.Id == id);
-        }
+
     }
 }
