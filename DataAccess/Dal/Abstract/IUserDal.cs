@@ -1,4 +1,4 @@
-﻿using DataAccess.Dal.CommonOperations;
+﻿using Core.Repositories.CommonInterfaces;
 using Entities.CommonEntities;
 using Entities.ObsEntities;
 using System;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Dal.Abstract
 {
-    public interface IUserDal:ICommonDal<User>
+    public interface IUserDal: IRepositoryBase<User>
     {
         User GetUserByEmailAndPassword(string email, string password);
         List<OperationClaim> GetUserOperationClaims(int userId);

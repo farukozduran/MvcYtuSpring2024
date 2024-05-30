@@ -1,4 +1,4 @@
-﻿using DataAccess.Dal.CommonOperations;
+﻿using Core.Repositories.CommonInterfaces;
 using Entities.ObsEntities;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Dal.Abstract
 {
-    public interface IDepartmentDal:ICommonDal<Department>
+    public interface IDepartmentDal:IRepositoryBase<Department>
     {
         // special methods for department.
     }
