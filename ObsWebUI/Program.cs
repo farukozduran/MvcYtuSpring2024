@@ -1,26 +1,10 @@
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using Business.AuthorizationServices;
-using Business.AuthorizationServices.Abstract;
-using Business.AuthorizationServices.Concrete;
-using Business.CommonServices.Abstract;
-using Business.CommonServices.Concrete;
-using Business.Services.Obs.Abstract;
-using Business.Services.Obs.Concrete;
-using Business.Services.Obs.DependencyResolver;
-using Caching.Abstract;
-using Caching.Concrete;
-using DataAccess.Dal.Abstract;
-using DataAccess.Dal.Concrete;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.Extensions.Hosting;
 using ObsWebUI.MyMiddlewares;
-using System.Configuration;
-using System.Diagnostics;
+using ObsWebUI.Utilities;
 
 namespace ObsWebUI
 {
-	public class Program
+    public class Program
     {
         public static void Main(string[] args)
         {
@@ -37,11 +21,9 @@ namespace ObsWebUI
 
             builder.Services.AddHttpClient();
 
-            builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-            builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
-            {
-                containerBuilder.RegisterModule(new ObsDependencyModule());
-            });
+            builder.Services.AddSession();
+
+            
 
 
             // Dependency Injection
@@ -69,10 +51,6 @@ namespace ObsWebUI
 				options.AccessDeniedPath = cookieOptions.AccessDeniedPath;
 				options.SlidingExpiration = cookieOptions.SlidingExpiration;
 				options.ExpireTimeSpan = TimeSpan.FromSeconds(cookieOptions.TimeOut);
-
-
-
-
 			}
 );
 
@@ -131,6 +109,7 @@ namespace ObsWebUI
 			app.UseMiddleware<ErrorLoggerMiddleware>();
 
 
+            app.UseSession();
 
 			app.UseAuthentication();
 
